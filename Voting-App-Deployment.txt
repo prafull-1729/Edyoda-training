@@ -1,0 +1,59 @@
+login as: ec2-user
+Authenticating with public key "imported-openssh-key"
+Last login: Tue Jun  7 04:06:11 2022 from 182.74.120.34
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux 2 AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-2/
+2 package(s) needed for security, out of 9 available
+Run "sudo yum update" to apply all updates.
+[ec2-user@ip-172-31-29-86 ~]$ ls
+go  goapp  kubernetes-training
+[ec2-user@ip-172-31-29-86 ~]$ kubectl get po -o wide
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+[ec2-user@ip-172-31-29-86 ~]$ sudo su -
+Last login: Tue Jun  7 04:06:35 UTC 2022 on pts/0
+[root@ip-172-31-29-86 ~]# kubectl get po -o wide
+NAME                                READY   STATUS    RESTARTS   AGE     IP              NODE                                               NOMINATED NODE   READINESS GATES
+db-b54cd94f4-62k89                  1/1     Running   0          6d22h   192.168.43.11   ip-172-31-28-215.ap-southeast-1.compute.internal   <none>           <none>
+kubia2-dkqnx                        1/1     Running   0          7d21h   192.168.43.10   ip-172-31-28-215.ap-southeast-1.compute.internal   <none>           <none>
+kubia2-kk66d                        1/1     Running   0          7d21h   192.168.43.8    ip-172-31-28-215.ap-southeast-1.compute.internal   <none>           <none>
+kubia2-n72xv                        1/1     Running   0          3d23h   192.168.43.16   ip-172-31-28-215.ap-southeast-1.compute.internal   <none>           <none>
+kubia2-rtq4f                        1/1     Running   0          7d21h   192.168.43.9    ip-172-31-28-215.ap-southeast-1.compute.internal   <none>           <none>
+mavenir-mysql-54f7ddc699-nm8jg      0/1     Pending   0          3d23h   <none>          <none>                                             <none>           <none>
+mysql-1654233610-5cfcbc67f9-65vwg   0/1     Pending   0          3d23h   <none>          <none>                                             <none>           <none>
+redis-868d64d78-ks6xq               1/1     Running   0          6d22h   192.168.43.12   ip-172-31-28-215.ap-southeast-1.compute.internal   <none>           <none>
+result-5d57b59f4b-556q2             1/1     Running   0          6d22h   192.168.43.13   ip-172-31-28-215.ap-southeast-1.compute.internal   <none>           <none>
+vote-94849dc97-wh4xk                1/1     Running   0          6d22h   192.168.43.14   ip-172-31-28-215.ap-southeast-1.compute.internal   <none>           <none>
+worker-dd46d7584-s2mkh              1/1     Running   0          6d22h   192.168.43.15   ip-172-31-28-215.ap-southeast-1.compute.internal   <none>           <none>
+[root@ip-172-31-29-86 ~]# ls
+example-voting-app  get_helm.sh  kubernetes-training
+[root@ip-172-31-29-86 ~]# cd example-voting-app/
+[root@ip-172-31-29-86 example-voting-app]# ls
+architecture.png               docker-compose.yml  MAINTAINERS  worker
+dockercloud.yml                docker-stack.yml    README.md
+docker-compose-javaworker.yml  k8s-specifications  result
+docker-compose-simple.yml      LICENSE             vote
+[root@ip-172-31-29-86 example-voting-app]# cd k8s-specifications/
+[root@ip-172-31-29-86 k8s-specifications]# kubectl apply -f .
+deployment.apps/db unchanged
+service/db unchanged
+deployment.apps/redis unchanged
+service/redis unchanged
+deployment.apps/result unchanged
+service/result unchanged
+deployment.apps/vote unchanged
+service/vote unchanged
+deployment.apps/worker unchanged
+[root@ip-172-31-29-86 k8s-specifications]# kubectl get svc
+NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+db                 ClusterIP   10.109.231.28    <none>        5432/TCP         6d22h
+kubia2             ClusterIP   10.99.10.99      <none>        80/TCP           7d
+mavenir-mysql      ClusterIP   10.110.227.195   <none>        3306/TCP         3d23h
+mysql-1654233610   ClusterIP   10.109.87.255    <none>        3306/TCP         3d23h
+redis              ClusterIP   10.102.110.130   <none>        6379/TCP         6d22h
+result             NodePort    10.104.112.168   <none>        5001:31001/TCP   6d22h
+vote               NodePort    10.97.134.12     <none>        5000:31000/TCP   6d22h
+[root@ip-172-31-29-86 k8s-specifications]#
